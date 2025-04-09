@@ -6,11 +6,11 @@ import org.sopt.service.PostService;
 import java.util.List;
 
 public class PostController {
-    private PostService postService = new PostService();
+    private final PostService postService = new PostService();
     private int postId;
 
 
-    public void createPost(String title){
+    public void createPost(final String title){
         Post post = new Post(postId++, title);
 
         postService.createPost(post);
@@ -20,7 +20,7 @@ public class PostController {
         return postService.getAllPosts();
     }
 
-    public Post getPostById(int id){
+    public Post getPostById(final int id){
         Post postById = postService.getPostById(id);
         if (postById == null){
             System.err.println("Post not found");
@@ -28,13 +28,13 @@ public class PostController {
         return postById;
     }
 
-    public boolean deletePostById(int id){
+    public boolean deletePostById(final int id){
 
         return postService.deletePostById(id);
     }
 
     // 게시글 수정
-    public boolean updatePostTitle(int id, String newTitle){
+    public boolean updatePostTitle(final int id,final String newTitle){
 
         return postService.updatePostTitle(id, newTitle);
     }

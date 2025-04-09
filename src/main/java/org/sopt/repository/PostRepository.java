@@ -8,7 +8,7 @@ import java.util.List;
 public class PostRepository {
     List<Post> postList = new ArrayList<>();
 
-    public void save(Post post){
+    public void save(final Post post){
         postList.add(post);
     }
 
@@ -16,7 +16,7 @@ public class PostRepository {
         return postList;
     }
 
-    public Post findByPostById(int id){
+    public Post findByPostById(final int id){
 
         for(Post post : postList){
 
@@ -28,7 +28,7 @@ public class PostRepository {
         return null;
     }
 
-    public boolean deleteById(int id){
+    public boolean deleteById(final int id){
         for(Post post : postList){
             if (post.getId() == id){
                 return postList.remove(post);

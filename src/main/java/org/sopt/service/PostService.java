@@ -6,9 +6,9 @@ import org.sopt.repository.PostRepository;
 import java.util.List;
 
 public class PostService {
-    private PostRepository postRepository = new PostRepository();
+    private final PostRepository postRepository = new PostRepository();
 
-    public void createPost(Post post) {
+    public void createPost(final Post post) {
         postRepository.save(post);
     }
 
@@ -16,16 +16,16 @@ public class PostService {
         return postRepository.findAll();
     }
 
-    public Post getPostById(int id) {
+    public Post getPostById(final int id) {
         return postRepository.findByPostById(id);
     }
 
-    public boolean deletePostById(int id) {
+    public boolean deletePostById(final int id) {
         return postRepository.deleteById(id);
     }
 
     // 게시글 제목 수정
-    public boolean updatePostTitle(int id, String newTitle) {
+    public boolean updatePostTitle(final int id, final String newTitle) {
 
         Post byPostById = postRepository.findByPostById(id);
 
