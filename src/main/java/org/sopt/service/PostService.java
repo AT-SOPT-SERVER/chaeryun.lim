@@ -2,20 +2,18 @@ package org.sopt.service;
 
 import org.sopt.domain.Post;
 import org.sopt.repository.PostRepository;
+import org.sopt.util.PostIdGenerator;
 
 import java.util.List;
 
 public class PostService {
     private final PostRepository postRepository = new PostRepository();
 
-    // service에서 postId 관리
-    private int postId;
-
     public void createPost(final String title) {
         validateTitle(title);
 
         // Service에서만 Post 객체 생성
-        Post post = new Post(postId++, title);
+        Post post = new Post(PostIdGenerator.generatePostId(), title);
 
         postRepository.save(post);
     }
