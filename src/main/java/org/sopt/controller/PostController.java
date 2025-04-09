@@ -39,4 +39,10 @@ public class PostController {
 
         return postService.updatePostTitle(id, newTitle);
     }
+
+    // 키워드 검색 기능
+    public List<Post> searchPostsByKeyword(final String keyword){
+
+        return postService.searchPostsByKeyword(keyword);
+    }
 }

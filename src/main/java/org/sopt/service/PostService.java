@@ -6,6 +6,7 @@ import org.sopt.util.PostIdGenerator;
 import org.sopt.util.PostWriteLimiter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PostService {
     private final PostRepository postRepository = new PostRepository();
@@ -56,15 +57,40 @@ public class PostService {
         }
     }
 
+    // 키워드 검색 기능
+    public List<Post> searchPostsByKeyword(final String keyword) {
+
+        // 대, 소문자 구분 X
+        return postRepository.findAll().stream()
+                .filter(post -> post.getTitle().toLowerCase().contains(keyword))
+                .toList();
+
+//        // 대, 소문자 구분 O
+//        return postRepository.findAll().stream()
+//                .filter(post -> post.getTitle().contains(keyword))
+//                .toList();
+
+//        // 양쪽 공백 제거 및 대, 소문자 구분 O
+//        return postRepository.findAll().stream()
+//                .filter(post -> post.getTitle().trim().toLowerCase().contains(keyword))
+//                .toList();
+    }
+
+
+    /**
+     * 내부 로직
+     */
+
     // 게시글 제목 중복 방지
     private void validateTitle(final String title) {
 
-        List<Post> all = postRepository.findAll();
+        // anyMatch: 하나라도 일치시 true 반환
+        boolean check = postRepository.findAll().stream()
+                            .anyMatch(post -> post.getTitle().equals(title));
 
-        for (Post post : all){
-            if (post.getTitle().equals(title)){
-                throw new IllegalArgumentException("제목은 중복일 수 없습니다.");
-            }
+        if (check){
+            throw new IllegalArgumentException("제목은 중복일 수 없습니다.");
         }
     }
+
 }
