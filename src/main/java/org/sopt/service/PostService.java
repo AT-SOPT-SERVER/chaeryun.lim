@@ -6,7 +6,6 @@ import org.sopt.util.PostIdGenerator;
 import org.sopt.util.PostWriteLimiter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PostService {
     private final PostRepository postRepository = new PostRepository();
@@ -80,7 +79,6 @@ public class PostService {
     /**
      * 내부 로직
      */
-
     // 게시글 제목 중복 방지
     private void validateTitle(final String title) {
 
