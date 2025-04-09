@@ -3,6 +3,7 @@ package org.sopt.service;
 import org.sopt.domain.Post;
 import org.sopt.repository.PostRepository;
 import org.sopt.util.PostIdGenerator;
+import org.sopt.util.PostWriteLimiter;
 
 import java.util.List;
 
@@ -10,12 +11,21 @@ public class PostService {
     private final PostRepository postRepository = new PostRepository();
 
     public void createPost(final String title) {
-        validateTitle(title);
 
-        // Service에서만 Post 객체 생성
-        Post post = new Post(PostIdGenerator.generatePostId(), title);
+        if (PostWriteLimiter.checkPostTime()){
+            validateTitle(title);
 
-        postRepository.save(post);
+            // Service에서만 Post 객체 생성
+            Post post = new Post(PostIdGenerator.generatePostId(), title);
+
+            postRepository.save(post);
+
+            PostWriteLimiter.updateLastPostedTime();
+        } else {
+
+            throw new IllegalArgumentException("마지막 게시글 작성 시간 3분 후에 작성이 가능합니다.");
+        }
+
     }
 
     public List<Post> getAllPosts() {
