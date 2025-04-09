@@ -7,19 +7,19 @@ import java.util.List;
 
 public class PostController {
     private final PostService postService = new PostService();
-    private int postId;
 
-
+    // 게시글 생성
     public void createPost(final String title){
-        Post post = new Post(postId++, title);
 
-        postService.createPost(post);
+        postService.createPost(title);
     }
 
+    // 모든 게시글 가져오기
     public List<Post> getAllPosts(){
         return postService.getAllPosts();
     }
 
+    // postId로 게시글 가져오기
     public Post getPostById(final int id){
         Post postById = postService.getPostById(id);
         if (postById == null){
@@ -28,12 +28,13 @@ public class PostController {
         return postById;
     }
 
+    // postId로 게시글 삭제하기
     public boolean deletePostById(final int id){
 
         return postService.deletePostById(id);
     }
 
-    // 게시글 수정
+    // postId로 게시글을 가져와서 수정하기
     public boolean updatePostTitle(final int id,final String newTitle){
 
         return postService.updatePostTitle(id, newTitle);

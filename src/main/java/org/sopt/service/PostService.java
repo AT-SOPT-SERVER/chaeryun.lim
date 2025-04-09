@@ -8,7 +8,15 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository = new PostRepository();
 
-    public void createPost(final Post post) {
+    // service에서 postId 관리
+    private int postId;
+
+    public void createPost(final String title) {
+        validateTitle(title);
+
+        // Service에서만 Post 객체 생성
+        Post post = new Post(postId++, title);
+
         postRepository.save(post);
     }
 
@@ -29,11 +37,26 @@ public class PostService {
 
         Post byPostById = postRepository.findByPostById(id);
 
+        // 게시글 제목 중복 방지
+        validateTitle(newTitle);
+
         if (byPostById != null){
             byPostById.updateTitle(newTitle);
             return true;
         } else {
             return false;
+        }
+    }
+
+    // 게시글 제목 중복 방지
+    private void validateTitle(final String title) {
+
+        List<Post> all = postRepository.findAll();
+
+        for (Post post : all){
+            if (post.getTitle().equals(title)){
+                throw new IllegalArgumentException("제목은 중복일 수 없습니다.");
+            }
         }
     }
 }
