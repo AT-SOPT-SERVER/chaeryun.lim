@@ -5,6 +5,7 @@ import org.sopt.repository.PostRepository;
 import org.sopt.util.PostIdGenerator;
 import org.sopt.util.PostWriteLimiter;
 
+import java.text.BreakIterator;
 import java.util.List;
 
 public class PostService {
