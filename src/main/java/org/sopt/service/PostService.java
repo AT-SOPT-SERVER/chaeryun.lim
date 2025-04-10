@@ -5,7 +5,6 @@ import org.sopt.repository.PostRepository;
 import org.sopt.util.PostIdGenerator;
 import org.sopt.util.PostWriteLimiter;
 
-import java.text.BreakIterator;
 import java.util.List;
 
 public class PostService {
@@ -44,17 +43,10 @@ public class PostService {
     // 게시글 제목 수정
     public boolean updatePostTitle(final int id, final String newTitle) {
 
-        Post byPostById = postRepository.findByPostById(id);
-
         // 게시글 제목 중복 방지
         validateTitle(newTitle);
 
-        if (byPostById != null){
-            byPostById.updateTitle(newTitle);
-            return true;
-        } else {
-            return false;
-        }
+        return postRepository.updateById(id, newTitle);
     }
 
     // 키워드 검색 기능

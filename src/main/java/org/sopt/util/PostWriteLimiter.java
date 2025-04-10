@@ -14,7 +14,7 @@ public class PostWriteLimiter {
             return true;
         } else {
             // 3분 뒤 작성 가능
-            return LocalDateTime.now().isAfter(lastPostedTime.minusMinutes(timeLimit));
+            return LocalDateTime.now().isAfter(lastPostedTime.plusMinutes(timeLimit));
         }
     }
 

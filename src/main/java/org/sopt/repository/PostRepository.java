@@ -75,6 +75,23 @@ public class PostRepository {
         return false;
     }
 
+    // 파일 수정 로직
+    public boolean updateById(final int id, final String title){
+
+        return postList.stream()
+                .filter(post -> post.getId() == id)
+                .findFirst()
+                .map(post -> {
+                    post.updateTitle(title);
+                    saveFile();
+                    return true;
+                })
+                .orElse(false);
+    }
+
+    /**
+     * 내부 로직
+     */
     private void loadPostData(){
 
         try {
@@ -96,6 +113,30 @@ public class PostRepository {
                 br.close();
             }
         } catch (IOException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    // 파일 저장하기
+    private void saveFile(){
+        try {
+            File file = new File(filePath);
+
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(file, false)); // 덮어쓰기 모드
+
+            for (Post post : postList) {
+                bw.write(post.getId() + ", " + post.getTitle());
+                bw.newLine();
+            }
+
+            bw.flush();
+            bw.close();
+
+        } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
