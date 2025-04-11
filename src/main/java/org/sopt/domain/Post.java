@@ -48,7 +48,7 @@ public class Post {
 
     // 이모지 확인 및 갯수 확인
     private static List<String> getEmoji(String input) {
-        BreakIterator iterator = BreakIterator.getCharacterInstance(Locale.ENGLISH);
+        BreakIterator iterator = BreakIterator.getCharacterInstance(Locale.ROOT);
         iterator.setText(input);
 
         List<String> graphemes = new ArrayList<>();
