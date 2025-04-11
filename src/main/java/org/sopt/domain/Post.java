@@ -1,8 +1,9 @@
 package org.sopt.domain;
 
-import java.text.BreakIterator;
+import com.ibm.icu.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Post {
     private int id;
@@ -35,24 +36,25 @@ public class Post {
         // 모든 문자가 채움 문자거나 공백인 경우 필터링
         if (trim.isEmpty() || trim.chars().allMatch(c -> c == '\u3164' || Character.isWhitespace(c))){
             throw new IllegalArgumentException("제목은 공백일 수 없습니다.");
-        } else if (getGraphemes(trim).size() > 30) {
+        } else if (getEmoji(trim).size() > 30) {
             throw new IllegalArgumentException("제목은 30자를 넘을 수 없습니다.");
         } else if (trim.contains("  ") || trim.contains(" \u3164") || trim.contains("\u3165 ")) {
             throw new IllegalArgumentException("연속된 공백은 사용할 수 없습니다.");
         }
     }
 
-    // 이모지 확인 및 분리
-    private List<String> getGraphemes(String emoji){
-        BreakIterator iterator = BreakIterator.getWordInstance();
-        iterator.setText(emoji);
+    // 이모지 확인 및 갯수 확인
+    public static List<String> getEmoji(String input) {
+        BreakIterator iterator = BreakIterator.getCharacterInstance(Locale.ENGLISH);
+        iterator.setText(input);
 
         List<String> graphemes = new ArrayList<>();
-        for(int current = iterator.first(), next = iterator.next(); next != BreakIterator.DONE; current = next, next = iterator.next()) {
-            graphemes.add(emoji.substring(current, next));
+        int start = iterator.first();
+        for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+            graphemes.add(input.substring(start, end));
         }
 
-//        System.out.println(graphemes.size());
+        System.out.println(graphemes.size());
         return graphemes;
     }
 }

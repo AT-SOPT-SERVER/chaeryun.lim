@@ -12,6 +12,7 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'com.ibm.icu:icu4j:74.2'
 }
 
 test {
