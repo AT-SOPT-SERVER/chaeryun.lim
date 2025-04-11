@@ -28,6 +28,9 @@ public class Post {
         this.title = newTitle;
     }
 
+    /**
+     * 내부 로직
+     */
     // rich 도메인 구성을 위한 제목 validate
     private void validateTitle(String title){
 
@@ -44,7 +47,7 @@ public class Post {
     }
 
     // 이모지 확인 및 갯수 확인
-    public static List<String> getEmoji(String input) {
+    private static List<String> getEmoji(String input) {
         BreakIterator iterator = BreakIterator.getCharacterInstance(Locale.ENGLISH);
         iterator.setText(input);
 

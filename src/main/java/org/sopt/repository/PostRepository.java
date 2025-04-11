@@ -55,14 +55,11 @@ public class PostRepository {
 
     public Post findByPostById(final int id){
 
-        for(Post post : postList){
+        return postList.stream()
+                .filter(post -> post.getId() == id)
+                .findFirst()
+                .orElse(null);
 
-            if (post.getId() == id){
-                return post;
-            }
-        }
-
-        return null;
     }
 
     public boolean deleteById(final int id){
