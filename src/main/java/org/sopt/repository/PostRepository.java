@@ -10,7 +10,7 @@ import java.util.List;
 public class PostRepository {
 
     private final String filePath = "src/main/java/org/sopt/assets/Post.txt";
-    List<Post> postList = new ArrayList<>();
+    private final List<Post> postList = new ArrayList<>();
 
     public PostRepository() {
         loadPostData();
