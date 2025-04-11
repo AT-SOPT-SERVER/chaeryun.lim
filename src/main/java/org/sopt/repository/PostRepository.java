@@ -63,13 +63,8 @@ public class PostRepository {
     }
 
     public boolean deleteById(final int id){
-        for(Post post : postList){
-            if (post.getId() == id){
-                return postList.remove(post);
-            }
-        }
 
-        return false;
+        return postList.removeIf(post -> post.getId() == id);
     }
 
     // 파일 수정 로직
