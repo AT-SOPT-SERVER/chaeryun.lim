@@ -40,3 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Post.txt ###
+src/main/java/org/sopt/assets/
