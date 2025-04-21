@@ -1,9 +1,12 @@
-package org.sopt.controller;
+package org.sopt.post.controller;
 
-import org.sopt.dto.PostRequest;
-import org.sopt.dto.PostRes;
-import org.sopt.dto.UpdatePostReq;
-import org.sopt.service.PostService;
+import org.sopt.common.exception.CustomException;
+import org.sopt.common.exception.ErrorCode;
+import org.sopt.common.util.TitleValidator;
+import org.sopt.post.dto.PostRequest;
+import org.sopt.post.dto.PostRes;
+import org.sopt.post.dto.UpdatePostReq;
+import org.sopt.post.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +25,8 @@ public class PostController {
     // 게시글 생성
     @PostMapping
     public ResponseEntity<String> createPost(@RequestBody final PostRequest postRequestDTO){
+        // 유효성 검사
+        TitleValidator.validateTitle(postRequestDTO.getTitle());
 
         Long postId = postService.createPost(postRequestDTO.getTitle());
 
@@ -52,6 +57,9 @@ public class PostController {
     // postId로 게시글을 가져와서 수정하기
     @PutMapping
     public ResponseEntity<String> updatePost(@RequestBody final UpdatePostReq updatePostReq){
+        // 유효성 검사
+        TitleValidator.validateTitle(updatePostReq.getTitle());
+
         postService.updatePostTitle(updatePostReq);
         return ResponseEntity.ok("응답 성공");
     }
@@ -60,6 +68,9 @@ public class PostController {
     @GetMapping("/search")
     public ResponseEntity<List<PostRes>> searchPosts(@RequestParam(name = "keyword") final String keyword){
 
+        if (keyword.isEmpty()){
+            throw new CustomException(ErrorCode.CHAERYUN_ERROR);
+        }
         return ResponseEntity.ok(postService.searchPostsByKeyword(keyword));
     }
 }

@@ -1,10 +1,12 @@
-package org.sopt.service;
+package org.sopt.post.service;
 
-import org.sopt.domain.Post;
-import org.sopt.dto.PostRes;
-import org.sopt.dto.UpdatePostReq;
-import org.sopt.repository.PostRepository;
-import org.sopt.util.PostWriteLimiter;
+import org.sopt.common.exception.CustomException;
+import org.sopt.common.exception.ErrorCode;
+import org.sopt.post.domain.Post;
+import org.sopt.post.dto.PostRes;
+import org.sopt.post.dto.UpdatePostReq;
+import org.sopt.post.repository.PostRepository;
+import org.sopt.common.util.PostWriteLimiter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class PostService {
 
             return save.getId();
         } else {
-            throw new IllegalArgumentException("마지막 게시글 작성 시간 3분 후에 작성이 가능합니다.");
+            throw new CustomException(ErrorCode.TITLE_LIMIT);
         }
 
     }
@@ -50,7 +52,7 @@ public class PostService {
     public PostRes getPostById(final long id) {
         return postRepository.findById(id)
                 .map(post -> new PostRes(post.getId(), post.getTitle()))
-                .orElseThrow(() -> new RuntimeException("error"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
     }
 
     // postId로 Post 삭제하기
@@ -59,7 +61,7 @@ public class PostService {
         if (postRepository.existsById(id)){
             postRepository.deleteById(id);
         } else {
-            throw new RuntimeException("error");
+            throw new CustomException(ErrorCode.NOT_FOUND_POST);
         }
     }
 
@@ -71,7 +73,7 @@ public class PostService {
 
         // Id기반으로 찾기
         Post post = postRepository.findById(updatePostReq.getId())
-                .orElseThrow(() -> new RuntimeException("error"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         // 업데이트
         post.updateTitle(updatePostReq.getTitle());
@@ -98,7 +100,7 @@ public class PostService {
     private void validateTitle(final String title) {
 
         if (postRepository.existsByTitle(title)){
-            throw new IllegalArgumentException("제목은 중복일 수 없습니다.");
+            throw new CustomException(ErrorCode.CONFLICT_TITLE);
         }
     }
 
