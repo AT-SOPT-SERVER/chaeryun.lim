@@ -1,21 +1,28 @@
 package org.sopt.domain;
 
 import com.ibm.icu.text.BreakIterator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+@Entity
 public class Post {
-    private int id;
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
 
-    public Post(int id, String title) {
+    public Post(String title) {
         validateTitle(title);
-        this.id = id;
         this.title = title;
     }
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -26,6 +33,13 @@ public class Post {
     public void updateTitle(String newTitle) {
         validateTitle(newTitle);
         this.title = newTitle;
+    }
+
+    public Post() {}
+
+    public Post(Long id, String title) {
+        this.id = id;
+        this.title = title;
     }
 
     /**
@@ -57,7 +71,6 @@ public class Post {
             graphemes.add(input.substring(start, end));
         }
 
-        System.out.println(graphemes.size());
         return graphemes;
     }
 }
