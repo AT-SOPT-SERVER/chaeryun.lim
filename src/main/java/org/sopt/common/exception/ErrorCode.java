@@ -2,6 +2,7 @@ package org.sopt.common.exception;
 
 import org.springframework.http.HttpStatus;
 
+// 사용자 지정 예외 코드
 public enum ErrorCode {
 
     /**
