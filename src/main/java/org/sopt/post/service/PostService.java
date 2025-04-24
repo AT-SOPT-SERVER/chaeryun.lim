@@ -2,11 +2,11 @@ package org.sopt.post.service;
 
 import org.sopt.common.exception.CustomException;
 import org.sopt.common.exception.ErrorCode;
+import org.sopt.common.util.PostWriteLimiter;
 import org.sopt.post.domain.Post;
 import org.sopt.post.dto.PostRes;
 import org.sopt.post.dto.UpdatePostReq;
 import org.sopt.post.repository.PostRepository;
-import org.sopt.common.util.PostWriteLimiter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,14 +69,14 @@ public class PostService {
     public void updatePostTitle(final UpdatePostReq updatePostReq) {
 
         // 게시글 제목 중복 방지
-        validateTitle(updatePostReq.getTitle());
+        validateTitle(updatePostReq.title());
 
         // Id기반으로 찾기
-        Post post = postRepository.findById(updatePostReq.getId())
+        Post post = postRepository.findById(updatePostReq.id())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         // 업데이트
-        post.updateTitle(updatePostReq.getTitle());
+        post.updateTitle(updatePostReq.title());
 
         // 자동으로 되지만, 명시적으로 써놓기
         postRepository.save(post);

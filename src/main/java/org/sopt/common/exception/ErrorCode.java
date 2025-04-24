@@ -13,6 +13,8 @@ public enum ErrorCode {
     TITLE_LIMIT(40003, HttpStatus.BAD_REQUEST, "마지막 게시글 작성 시간 3분 후에 작성이 가능합니다."),
     TITLE_CANNOT_CONTAIN_CONSECUTIVE_SPACES(40004, HttpStatus.BAD_REQUEST, "제목에 연속된 공백은 포함될 수 없습니다."),
 
+    EMPTY_PARAMETER(40005, HttpStatus.BAD_REQUEST, "파라미터 값은 필수입니다."),
+
     /**
      * 404xx NOT_FOUND
      */

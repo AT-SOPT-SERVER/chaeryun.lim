@@ -1,16 +1,14 @@
 package org.sopt.post.dto;
 
-public class PostRequest {
-    private String title;
+import java.util.Objects;
 
-    public PostRequest(String title) {
-        this.title = title;
+public record PostRequest(
+        String title
+) {
+
+    public PostRequest {
+        // Null 체킹
+        Objects.requireNonNull(title);
     }
 
-    public PostRequest() {
-    }
-
-    public String getTitle() {
-        return title;
-    }
 }
