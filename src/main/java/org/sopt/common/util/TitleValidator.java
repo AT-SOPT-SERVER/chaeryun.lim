@@ -1,48 +1,26 @@
-package org.sopt.domain;
+package org.sopt.common.util;
 
 import com.ibm.icu.text.BreakIterator;
+import org.sopt.common.exception.CustomException;
+import org.sopt.common.exception.ErrorCode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class Post {
-    private int id;
-    private String title;
+public class TitleValidator {
 
-    public Post(int id, String title) {
-        validateTitle(title);
-        this.id = id;
-        this.title = title;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void updateTitle(String newTitle) {
-        validateTitle(newTitle);
-        this.title = newTitle;
-    }
-
-    /**
-     * 내부 로직
-     */
-    // rich 도메인 구성을 위한 제목 validate
-    private void validateTitle(String title){
+    public static void validateTitle(String title){
 
         String trim = title.trim();
 
         // 모든 문자가 채움 문자거나 공백인 경우 필터링
         if (trim.isEmpty() || trim.chars().allMatch(c -> c == '\u3164' || Character.isWhitespace(c))){
-            throw new IllegalArgumentException("제목은 공백일 수 없습니다.");
+            throw new CustomException(ErrorCode.TITLE_NOT_EMPTY);
         } else if (getEmoji(trim).size() > 30) {
-            throw new IllegalArgumentException("제목은 30자를 넘을 수 없습니다.");
+            throw new CustomException(ErrorCode.TITLE_TOO_LONG);
         } else if (trim.contains("  ") || trim.contains(" \u3164") || trim.contains("\u3165 ")) {
-            throw new IllegalArgumentException("연속된 공백은 사용할 수 없습니다.");
+            throw new CustomException(ErrorCode.TITLE_CANNOT_CONTAIN_CONSECUTIVE_SPACES);
         }
     }
 
@@ -57,7 +35,6 @@ public class Post {
             graphemes.add(input.substring(start, end));
         }
 
-        System.out.println(graphemes.size());
         return graphemes;
     }
 }
