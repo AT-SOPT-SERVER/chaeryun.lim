@@ -5,6 +5,7 @@ import org.sopt.user.dto.CreateUserReq;
 import org.sopt.user.dto.CreateUserRes;
 import org.sopt.user.service.UserService;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,8 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("userId", String.valueOf(user.userId()));
 
-        return ResponseEntity.ok().headers(headers).body(SuccessRes.created(user));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .headers(headers)
+                .body(SuccessRes.created(user));
     }
 }

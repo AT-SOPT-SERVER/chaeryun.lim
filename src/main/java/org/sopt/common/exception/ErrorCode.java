@@ -16,11 +16,19 @@ public enum ErrorCode {
     EMPTY_PARAMETER(40005, HttpStatus.BAD_REQUEST, "파라미터 값은 필수입니다."),
 
     USERNAME_NOT_EMPTY(40006, HttpStatus.BAD_REQUEST, "이름은 비어있을 수 없습니다."),
+
+    CONTENT_NOT_EMPTY(40007, HttpStatus.BAD_REQUEST, "내용은 비어있을 수 없습니다."),
+    CONTENT_TOO_LONG(40008, HttpStatus.BAD_REQUEST, "내용의 길이는 1000자를 넘을 수 없습니다."),
+
+    USERNAME_TOO_LONG(40009, HttpStatus.BAD_REQUEST, "이름의 길이는 10자를 넘을 수 없습니다."),
+
     /**
      * 404xx NOT_FOUND
      */
     NOT_SUPPORTED_URL(40401, HttpStatus.NOT_FOUND, "지원하지 않는 URL입니다."),
     NOT_FOUND_POST(40402, HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
+    NOT_FOUND_USER(40403, HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
+    NOT_FOUND_TAG(40404, HttpStatus.NOT_FOUND, "존재하지 않는 태그입니다."),
 
     /**
      * 405xx METHOD_NOT_ALLOWED
