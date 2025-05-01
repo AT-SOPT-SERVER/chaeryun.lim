@@ -9,9 +9,19 @@ public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String imageName;
+    private String imageUrl;
+
+    public Post() {}
 
     public Post(String title) {
         this.title = title;
+    }
+
+    public Post(String title, String imageName, String imageUrl) {
+        this.title = title;
+        this.imageName = imageName;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -22,15 +32,17 @@ public class Post {
         return this.title;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void updateTitle(String newTitle) {
         this.title = newTitle;
     }
 
-    public Post() {}
-
-    public Post(Long id, String title) {
-        this.id = id;
-        this.title = title;
-    }
 
 }

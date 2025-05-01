@@ -8,9 +8,11 @@ import org.sopt.post.dto.PostRequest;
 import org.sopt.post.dto.PostRes;
 import org.sopt.post.dto.UpdatePostReq;
 import org.sopt.post.service.PostService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -25,12 +27,14 @@ public class PostController {
     }
 
     // 게시글 생성
-    @PostMapping
-    public ResponseEntity<SuccessRes<?>> createPost(@RequestBody final PostRequest postRequestDTO){
-        // 유효성 검사
-        TitleValidator.validateTitle(postRequestDTO.title());
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<SuccessRes<?>> createPost(@RequestPart("title") final PostRequest title,
+                                                    @RequestPart(value = "file", required = false) final MultipartFile file){
 
-        Long postId = postService.createPost(postRequestDTO.title());
+        // 유효성 검사
+        TitleValidator.validateTitle(title.title());
+
+        Long postId = postService.createPost(title.title(), file);
 
         return ResponseEntity.created(URI.create("/posts/" + postId))
                 .body(SuccessRes.created(null));

@@ -8,32 +8,46 @@ import org.sopt.post.dto.PostRes;
 import org.sopt.post.dto.UpdatePostReq;
 import org.sopt.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final AwsS3Service awsS3Service;
 
     // Bean 주입을 위한 생성자
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, AwsS3Service awsS3Service) {
         this.postRepository = postRepository;
+        this.awsS3Service = awsS3Service;
     }
 
     // Post 생성
-    public Long createPost(final String title) {
+    @Transactional
+    public Long createPost(final String title, MultipartFile file) {
 
         if (PostWriteLimiter.checkPostTime()){
             validateTitle(title);
 
-            // Service에서만 Post 객체 생성
-            Post post = new Post(title);
+            if (!file.isEmpty()){
+                String fileName = awsS3Service.uploadFile(file);
+                String url = awsS3Service.getUrl(fileName);
+                Post post = new Post(title, fileName, url);
+                Post save = postRepository.save(post);
+                PostWriteLimiter.updateLastPostedTime();
 
-            Post save = postRepository.save(post);
+                return save.getId();
+            } else {
+                // Service에서만 Post 객체 생성
+                Post post = new Post(title);
+                Post save = postRepository.save(post);
+                PostWriteLimiter.updateLastPostedTime();
 
-            PostWriteLimiter.updateLastPostedTime();
+                return save.getId();
+            }
 
-            return save.getId();
         } else {
             throw new CustomException(ErrorCode.TITLE_LIMIT);
         }
@@ -56,16 +70,18 @@ public class PostService {
     }
 
     // postId로 Post 삭제하기
+    @Transactional
     public void deletePostById(final long id) {
 
-        if (postRepository.existsById(id)){
-            postRepository.deleteById(id);
-        } else {
-            throw new CustomException(ErrorCode.NOT_FOUND_POST);
-        }
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        postRepository.delete(post);
+        awsS3Service.deleteFile(post.getImageName());
     }
 
     // 게시글 제목 수정
+    @Transactional
     public void updatePostTitle(final UpdatePostReq updatePostReq) {
 
         // 게시글 제목 중복 방지

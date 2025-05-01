@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     EMPTY_PARAMETER(40005, HttpStatus.BAD_REQUEST, "파라미터 값은 필수입니다."),
 
+    S3_UPLOAD_FAIL(40006, HttpStatus.BAD_REQUEST, "AWS 파일 업로드 실패"),
     /**
      * 404xx NOT_FOUND
      */
@@ -30,6 +31,7 @@ public enum ErrorCode {
      * 409xx CONFLICT
      */
     CONFLICT_TITLE(40901, HttpStatus.CONFLICT, "중복된 게시글 제목입니다."),
+    INVALID_FILE_NAME(40902, HttpStatus.CONFLICT, "중복된 파일 제목입니다."),
 
     /**
      * 500xx INTERNAL_SERVER_ERROR
