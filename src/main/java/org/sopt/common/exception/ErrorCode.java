@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     EMPTY_PARAMETER(40005, HttpStatus.BAD_REQUEST, "파라미터 값은 필수입니다."),
 
+    USERNAME_NOT_EMPTY(40006, HttpStatus.BAD_REQUEST, "이름은 비어있을 수 없습니다."),
     /**
      * 404xx NOT_FOUND
      */
