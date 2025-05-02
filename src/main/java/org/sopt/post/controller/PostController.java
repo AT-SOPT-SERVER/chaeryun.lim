@@ -28,7 +28,7 @@ public class PostController {
 
     // 게시글 생성
     @PostMapping
-    public ResponseEntity<SuccessRes<?>> createPost(@RequestBody final PostRequest postRequestDTO,
+    public ResponseEntity<SuccessRes<CreatePostRes>> createPost(@RequestBody final PostRequest postRequestDTO,
                                                     @RequestHeader(name = "userId") final Long userId){
         // 유효성 검사
         TitleValidator.validateTitle(postRequestDTO.title());
@@ -53,7 +53,7 @@ public class PostController {
 
     // postId로 게시글 삭제하기
     @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessRes<?>> deletePost(@PathVariable(name = "id") final long id){
+    public ResponseEntity<SuccessRes<Void>> deletePost(@PathVariable(name = "id") final long id){
 
         postService.deletePostById(id);
         return ResponseEntity.ok(SuccessRes.ok(null));
@@ -61,7 +61,7 @@ public class PostController {
 
     // postId로 게시글을 가져와서 수정하기
     @PutMapping("/{id}")
-    public ResponseEntity<SuccessRes<?>> updatePost(@PathVariable final long id,
+    public ResponseEntity<SuccessRes<Void>> updatePost(@PathVariable final long id,
                                                     @RequestBody final UpdatePostReq updatePostReq,
                                                     @RequestHeader(name = "userId") final Long userId){
         // 유효성 검사
