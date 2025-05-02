@@ -46,6 +46,7 @@ src/main/java/org/sopt/assets/
 
 ### application.yml ###
 src/main/resources/application.yml
+src/main/resources/application-aws.yml
 
 ### http 파일 ###
 postRequest.http
