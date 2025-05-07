@@ -109,5 +109,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
           script: |
-            sudo docker stop ${{env.CURRENT_UPSTREAM}}
-            sudo docker rm ${{env.CURRENT_UPSTREAM}}
+            if [ "$(sudo docker ps -aq -f name=${{ env.CURRENT_UPSTREAM }})" ]; then
+              sudo docker stop ${{ env.CURRENT_UPSTREAM }}
+              sudo docker rm ${{ env.CURRENT_UPSTREAM }}
+            else
+              echo "No container named ${{ env.CURRENT_UPSTREAM }} found. Skipping stop & remove."
+            fi
