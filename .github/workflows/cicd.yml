@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "feat/aws-study_week02" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ubuntu-latest
