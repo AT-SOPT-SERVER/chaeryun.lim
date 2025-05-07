@@ -27,6 +27,7 @@ jobs:
 
       - name: Add secret.yml (관리자 계정 파일)
         run: |
+          mkdir ./src/main/resources
           cd ./src/main/resources
           echo "${{ secrets.APPLICATION }}" > ./application.yml
           echo "${{ secrets.APPLICATION_AWS }}" > ./application-aws.yml
