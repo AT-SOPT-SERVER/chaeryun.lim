@@ -32,6 +32,9 @@ jobs:
           echo "${{ secrets.APPLICATION }}" > ./application.yml
           echo "${{ secrets.APPLICATION_AWS }}" > ./application-aws.yml
 
+      - name: Debug Application.yml
+        run: cat ./src/main/resources/application.yml
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
