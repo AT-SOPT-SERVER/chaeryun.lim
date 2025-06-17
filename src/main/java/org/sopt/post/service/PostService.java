@@ -22,6 +22,7 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+
     // Bean 주입을 위한 생성자
     public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
@@ -67,6 +68,11 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         return PostRes.fromPost(post);
+    }
+
+    // Post 엔티티 반환
+    public Post getPost(final long id){
+        return postRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
     }
 
     // postId로 Post 삭제하기
