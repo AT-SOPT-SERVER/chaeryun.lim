@@ -37,4 +37,9 @@ public class Comment {
                 .user(user)
                 .post(post).build();
     }
+    
+    // 댓글 내용 수정
+    public void updateComment(String comment) {
+        this.comment = comment;
+    }
 }

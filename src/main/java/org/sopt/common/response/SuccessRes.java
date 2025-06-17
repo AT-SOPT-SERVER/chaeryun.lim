@@ -10,7 +10,11 @@ public record SuccessRes<T>(
 ) {
 
     public static <T> SuccessRes<T> created(T data) {
-        return new SuccessRes<T>(201, "응답 성공", data);
+        return new SuccessRes<T>(201, "생성 성공", data);
+    }
+
+    public static <T> SuccessRes<T> created() {
+        return new SuccessRes<T>(201, "생성 성공", null);
     }
 
     public static <T> SuccessRes<T> ok(T data) {

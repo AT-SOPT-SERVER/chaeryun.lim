@@ -23,13 +23,18 @@ public enum ErrorCode {
     USERNAME_TOO_LONG(40009, HttpStatus.BAD_REQUEST, "이름의 길이는 10자를 넘을 수 없습니다."),
 
     /**
+     * 403xx
+     */
+    FORBIDDEN_COMMENT(40301, HttpStatus.FORBIDDEN, "댓글에 대한 권한이 없습니다."),
+
+    /**
      * 404xx NOT_FOUND
      */
     NOT_SUPPORTED_URL(40401, HttpStatus.NOT_FOUND, "지원하지 않는 URL입니다."),
     NOT_FOUND_POST(40402, HttpStatus.NOT_FOUND, "존재하지 않는 게시물입니다."),
     NOT_FOUND_USER(40403, HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
     NOT_FOUND_TAG(40404, HttpStatus.NOT_FOUND, "존재하지 않는 태그입니다."),
-
+    NOT_FOUND_COMMENT(40405, HttpStatus.NOT_FOUND, "존재하지 않는 댓글입니다."),
     /**
      * 405xx METHOD_NOT_ALLOWED
      */
