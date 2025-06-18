@@ -1,5 +1,7 @@
 package org.sopt.post.service;
 
+import org.sopt.comment.dto.response.CommentListResponse;
+import org.sopt.comment.service.CommentService;
 import org.sopt.common.exception.CustomException;
 import org.sopt.common.exception.ErrorCode;
 import org.sopt.common.util.PostWriteLimiter;
@@ -10,6 +12,7 @@ import org.sopt.post.dto.PostListRes;
 import org.sopt.post.dto.PostRequest;
 import org.sopt.post.dto.PostRes;
 import org.sopt.post.dto.UpdatePostReq;
+import org.sopt.post.dto.response.PostDetailResponse;
 import org.sopt.post.repository.PostRepository;
 import org.sopt.user.domain.User;
 import org.sopt.user.repository.UserRepository;
@@ -22,11 +25,13 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentService commentService;
 
     // Bean 주입을 위한 생성자
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, CommentService commentService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.commentService = commentService;
     }
 
     // Post 생성
@@ -63,11 +68,18 @@ public class PostService {
     }
 
     // postId로 Post 불러오기 (제목, 내용, 게시글 작성자)
-    public PostRes getPostById(final long id) {
+    public PostDetailResponse getPostById(final Long userId, final long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        return PostRes.fromPost(post);
+        if (userId == null){
+            CommentListResponse comments = commentService.getComments(id);
+            return PostDetailResponse.from(PostRes.fromPost(post), comments);
+        } else {
+            CommentListResponse commentsWithUserId = commentService.getCommentsWithUserId(userId, id);
+            return PostDetailResponse.from(PostRes.fromPost(post), commentsWithUserId);
+        }
+
     }
 
     // Post 엔티티 반환

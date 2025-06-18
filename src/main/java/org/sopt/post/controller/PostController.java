@@ -9,6 +9,7 @@ import org.sopt.post.dto.PostListRes;
 import org.sopt.post.dto.PostRequest;
 import org.sopt.post.dto.PostRes;
 import org.sopt.post.dto.UpdatePostReq;
+import org.sopt.post.dto.response.PostDetailResponse;
 import org.sopt.post.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -45,10 +46,12 @@ public class PostController {
         return ResponseEntity.ok(SuccessRes.ok(postService.getAllPosts()));
     }
 
-    // postId로 게시글 가져오기
+    // postId로 게시글 상세 조회
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessRes<PostRes>> getPost(@PathVariable(name = "id") final long id){
-        return ResponseEntity.ok(SuccessRes.ok(postService.getPostById(id)));
+    public ResponseEntity<SuccessRes<PostDetailResponse>> getPost(@PathVariable(name = "id") final long id,
+                                                                  @RequestHeader(name = "userId") final Long userId){
+
+        return ResponseEntity.ok(SuccessRes.ok(postService.getPostById(id, userId)));
     }
 
     // postId로 게시글 삭제하기

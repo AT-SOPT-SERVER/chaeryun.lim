@@ -1,6 +1,7 @@
 package org.sopt.common.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -18,6 +19,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ErrorRes.from(errorCode));
+    }
+
+    // Valid 검사 실패 핸들러
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorRes> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException methodArgumentNotValidException) {
+
+        return ResponseEntity
+                .status(methodArgumentNotValidException.getStatusCode())
+                .body(new ErrorRes(methodArgumentNotValidException.getStatusCode().value(), methodArgumentNotValidException.getMessage()));
     }
 
     // 해당하는 url이 없는 NoHadlerException 핸들러
