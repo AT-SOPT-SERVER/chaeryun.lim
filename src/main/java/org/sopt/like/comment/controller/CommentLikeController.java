@@ -18,8 +18,10 @@ public class CommentLikeController {
     private final CommentLikeService commentLikeService;
 
     @PostMapping("/like")
-    public ResponseEntity<SuccessRes<?>> createCommentLike(@RequestHeader(name = "userId") long userId,
+    public ResponseEntity<SuccessRes<Void>> createCommentLike(@RequestHeader(name = "userId") long userId,
                                                            @RequestBody CreateCommentLikeRequest request){
         commentLikeService.createCommentLike(userId, request);
+
+        return ResponseEntity.ok(SuccessRes.ok(null));
     }
 }

@@ -11,7 +11,7 @@ import org.sopt.common.exception.CustomException;
 import org.sopt.common.exception.ErrorCode;
 import org.sopt.like.comment.service.CommentLikeService;
 import org.sopt.post.domain.Post;
-import org.sopt.post.service.PostService;
+import org.sopt.post.service.PostServiceImpl;
 import org.sopt.user.domain.User;
 import org.sopt.user.service.UserService;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserService userService;
-    private final PostService postService;
+    private final PostServiceImpl postService;
     private final CommentLikeService commentLikeService;
 
     // 댓글 작성
@@ -93,5 +93,12 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+    }
+    /**
+     * 내부 로직
+     */
+    // 단일 댓글 조회
+    public Comment getComment(long commentId){
+        return commentRepository.findById(commentId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
     }
 }

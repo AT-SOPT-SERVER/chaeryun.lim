@@ -8,7 +8,9 @@ public record CommentResponse(
         long userId,
     String username,
     long commentId,
-    String comment
+    String comment,
+        boolean isLike,
+        long likeCount
 ) {
     public static CommentResponse from(Comment comment) {
         return CommentResponse.builder()

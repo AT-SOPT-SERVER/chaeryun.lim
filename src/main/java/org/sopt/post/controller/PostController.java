@@ -1,31 +1,29 @@
 package org.sopt.post.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.sopt.common.exception.CustomException;
 import org.sopt.common.exception.ErrorCode;
 import org.sopt.common.response.SuccessRes;
 import org.sopt.common.util.TitleValidator;
+import org.sopt.facade.PostFacade;
 import org.sopt.post.dto.CreatePostRes;
-import org.sopt.post.dto.PostListRes;
+import org.sopt.post.dto.PostListItem;
 import org.sopt.post.dto.PostRequest;
-import org.sopt.post.dto.PostRes;
 import org.sopt.post.dto.UpdatePostReq;
 import org.sopt.post.dto.response.PostDetailResponse;
-import org.sopt.post.service.PostService;
+import org.sopt.post.service.PostServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
-    private final PostService postService;
-
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
+    private final PostServiceImpl postService;
+    private final PostFacade postFacade;
 
     // 게시글 생성
     @PostMapping
@@ -42,7 +40,7 @@ public class PostController {
 
     // 모든 게시글 가져오기 (최신 순으로 조회 / 제목과 게시글 작성자만 출력)
     @GetMapping
-    public ResponseEntity<SuccessRes<PostListRes>> getPosts(){
+    public ResponseEntity<SuccessRes<PostListItem>> getPosts(){
         return ResponseEntity.ok(SuccessRes.ok(postService.getAllPosts()));
     }
 
@@ -51,7 +49,11 @@ public class PostController {
     public ResponseEntity<SuccessRes<PostDetailResponse>> getPost(@PathVariable(name = "id") final long id,
                                                                   @RequestHeader(name = "userId") final Long userId){
 
-        return ResponseEntity.ok(SuccessRes.ok(postService.getPostById(id, userId)));
+        if (userId == null){
+            return ResponseEntity.ok(SuccessRes.ok(postFacade.getPostDetailAndComments(id)));
+        } else {
+            return ResponseEntity.ok(SuccessRes.ok(postFacade.getPostDetailAndCommentsWithLogin(userId, id)));
+        }
     }
 
     // postId로 게시글 삭제하기
@@ -76,8 +78,8 @@ public class PostController {
 
     // 키워드 검색 기능
     @GetMapping("/search")
-    public ResponseEntity<SuccessRes<PostListRes>> searchPosts(@RequestParam(name = "keyword", required = false) final String keyword,
-                                                               @RequestParam(name = "username", required = false) final String username){
+    public ResponseEntity<SuccessRes<PostListItem>> searchPosts(@RequestParam(name = "keyword", required = false) final String keyword,
+                                                                @RequestParam(name = "username", required = false) final String username){
 
         if (!StringUtils.hasText(keyword) && !StringUtils.hasText(username)){
             throw new CustomException(ErrorCode.CHAERYUN_ERROR);
@@ -95,7 +97,7 @@ public class PostController {
 
     // 태그 기반 검색
     @GetMapping("/search/tags")
-    public ResponseEntity<SuccessRes<PostListRes>> searchTags(@RequestParam(name = "tag") final String tagName){
+    public ResponseEntity<SuccessRes<PostListItem>> searchTags(@RequestParam(name = "tag") final String tagName){
         if (!StringUtils.hasText(tagName)){
             throw new CustomException(ErrorCode.CHAERYUN_ERROR);
         }
